@@ -1,20 +1,18 @@
 <template>
   <div class="container p-2 lg:p-8 flex flex-col">
-    <div class="m-8 flex items-center justify-center">
-      <Logo />
+    <h2 class="my-2"> Viewing {{ candidates.length }} candidates for <strong><a href="https://rimsys-inc.breezy.hr/p/7ced46d18c60-senior-full-stack-engineer">Senior Full Stack Software Engineer</a></strong></h2>
+
+    <div class="grid grid-cols-9 gap-4">
+      <div class="col-span-3 bg-white">
+        <ul v-if="candidates.length &gt; 0" class="mt-2 divide-y">
+          <contact-card v-for="(candidate, index) in candidates" :key="index" :candidate="candidate" />
+        </ul>
+      </div>
+      <div class="col-span-6 bg-white p-4">
+        <NuxtChild />
+      </div>
     </div>
-    <ul v-if="users.length === 0" class="grid grid-cols-1 gap-6 bg-gray-100 rounded p-8 w-full sm:grid-cols-2 lg:grid-cols-3">
-      <contact-card-skeleton v-for="i in 9" :key="`skel-${i}`" />
-    </ul>
-    <ul v-if="users.length &gt; 0" class="grid grid-cols-1 gap-6 bg-gray-100 rounded p-8 w-full sm:grid-cols-2 lg:grid-cols-3">
-      <contact-card v-for="(user, index) in users" :key="index" :user="user" />
-    </ul>
-    <div class="text-center mt-4">
-      <span>provided by endpoint</span><span>&nbsp;</span>
-      <a class="text-blue-400" :href="`${$config.apiUrl}/example?count=9`">/example</a>
-      <span>&nbsp;</span>
-      <span class="text-gray-400 text-sm">(2 second delay)</span>
-    </div>
+
     <div class="text-center mx-auto mt-4">
       <span class="mr-4">nuxt-tailvue kitchen sink:</span>
       <div class="mt-2 flex mx-auto">
@@ -43,14 +41,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Users } from '@/types/api'
+import { Candidates } from '@/types/api'
 export default Vue.extend({
   data () {
-    const users:Users = []
-    const count:number = 9
+    const candidates:Candidates = []
+    const count:number = 0
 
     return {
-      users,
+      candidates,
       count,
     }
   },
@@ -60,13 +58,12 @@ export default Vue.extend({
   },
   methods: {
     async get (count: number): Promise<void> {
-      await this.$sleep(2000)
-      this.users = (
-        await this.$axios.get('example', { params: { count } })
-      ).data.data as Users
+      this.candidates = (
+        await this.$axios.get('candidates', { params: { count } })
+      ).data.data as Candidates
     },
     total (count: number): void {
-      this.users = []
+      this.candidates = []
       this.count = count
       this.get(this.count)
     },
