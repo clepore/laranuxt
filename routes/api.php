@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\ExperienceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,5 +22,9 @@ Route::get('/', [Controller::class, 'routes'])
 Route::get('/example', [Controller::class, 'example'])->name('example route');
 Route::get('/error', [Controller::class, 'error'])->name('error route');
 
-Route::get('/candidates/{candidate}', [CandidateController::class, 'show']);
 Route::get('/candidates', [CandidateController::class, 'index']);
+
+Route::post('/experiences', [ExperienceController::class, 'store']);
+Route::delete('/experiences/{experience}', [ExperienceController::class, 'destroy']);
+Route::patch('/experiences/{experience}', [ExperienceController::class, 'update']);
+Route::get('/experiences', [ExperienceController::class, 'index']);
