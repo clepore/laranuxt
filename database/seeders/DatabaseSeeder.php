@@ -13,6 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // User::factory(10)->create();
+        $candidates = Candidate::factory()
+            ->count(3)
+            ->create();
     }
 }
